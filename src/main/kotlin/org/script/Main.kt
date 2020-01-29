@@ -28,6 +28,7 @@ suspend fun File.eachLeaf(lambda: suspend (File) -> Unit) {
         }
         return
     }
+    println("process: ${this.absolutePath}")
     lambda(this)
 }
 
