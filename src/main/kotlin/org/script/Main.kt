@@ -20,6 +20,7 @@ suspend fun main(args: Array<String>) {
 
 suspend fun File.eachLeaf(lambda: suspend (File) -> Unit) {
     if (isHidden) {
+        println("hiddent ${this.absolutePath}")
         return
     }
     if (isDirectory) {
@@ -28,7 +29,6 @@ suspend fun File.eachLeaf(lambda: suspend (File) -> Unit) {
         }
         return
     }
-    println("process: ${this.absolutePath}")
     lambda(this)
 }
 
