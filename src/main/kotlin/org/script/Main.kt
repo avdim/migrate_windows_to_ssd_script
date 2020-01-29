@@ -8,7 +8,7 @@ import java.util.*
 
 var process: String = ""
 var processed: Int = 0
-var found:Int = 0
+var found: Int = 0
 
 suspend fun main(args: Array<String>) {
     println("hello windows")
@@ -22,7 +22,7 @@ suspend fun main(args: Array<String>) {
             setSwingData(
                 FormData(
                     processed = processed,
-                    process =  process,
+                    process = process,
                     found = found,
                     time = Date().toString()
                 )
@@ -30,8 +30,8 @@ suspend fun main(args: Array<String>) {
         }
     }
 
-    GlobalScope.launch {
-        roots.forEach {
+    roots.forEach {
+        GlobalScope.launch {
             it.eachLeaf {
                 val ext = it.extension.toLowerCase()
                 if (ext == "jpg" || ext == "jpeg") {
@@ -40,6 +40,7 @@ suspend fun main(args: Array<String>) {
             }
         }
     }
+
 }
 
 suspend fun File.eachLeaf(depth: Int = 8, lambda: suspend (File) -> Unit) {
