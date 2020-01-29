@@ -1,12 +1,14 @@
 package org.script
 
-import kotlinx.coroutines.*
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.io.File
 import java.util.*
-import java.util.concurrent.ConcurrentHashMap
 
 var process: String = ""
-val visited: MutableSet<String> = Collections.newSetFromMap(ConcurrentHashMap())
+var processed: Int = 0
+var found:Int = 0
 
 suspend fun main(args: Array<String>) {
     println("hello windows")
@@ -17,8 +19,14 @@ suspend fun main(args: Array<String>) {
     GlobalScope.launch {
         while (true) {
             delay(50)
-            setSwingText(process)
-            stringProperty.set(process)
+            setSwingData(
+                FormData(
+                    processed = processed,
+                    process =  process,
+                    found = found,
+                    time = Date().toString()
+                )
+            )
         }
     }
 
@@ -27,17 +35,18 @@ suspend fun main(args: Array<String>) {
             it.eachLeaf {
                 val ext = it.extension.toLowerCase()
                 if (ext == "jpg" || ext == "jpeg") {
-                    println(it.absolutePath)
+                    found++
                 }
             }
         }
     }
 }
 
-suspend fun File.eachLeaf(depth: Int = 5, lambda: suspend (File) -> Unit) {
+suspend fun File.eachLeaf(depth: Int = 8, lambda: suspend (File) -> Unit) {
+    processed++
     GlobalScope.launch {
         process = absolutePath
-        if(!isAbsolute) {
+        if (!isAbsolute) {
             return@launch
         }
         if (depth <= 0) {
@@ -52,18 +61,15 @@ suspend fun File.eachLeaf(depth: Int = 5, lambda: suspend (File) -> Unit) {
         if (name.startsWith("$")) {
             return@launch
         }
-        if (visited.contains(absolutePath)) {
-            return@launch
-        }
-
-        visited.add(absolutePath)
+//        if (visited.contains(absolutePath)) {
+//            return@launch
+//        }
+//        visited.add(absolutePath)
 
         if (isDirectory) {
             for (file in listFiles().orEmpty()) {
                 GlobalScope.launch {
-                    if (!visited.contains(file.absolutePath)) {
-                        file.eachLeaf(depth - 1, lambda)
-                    }
+                    file.eachLeaf(depth - 1, lambda)
                 }
             }
             return@launch
