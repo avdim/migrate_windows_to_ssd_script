@@ -44,7 +44,7 @@ suspend fun main(args: Array<String>) {
                     minSizeStr = minSizeFile?.printInfo().orEmpty(),
                     maxSizeStr = maxSizeFile?.printInfo().orEmpty(),
                     totalSize = "${totalSize / 1024 / 1000f} Mb",
-                    duplicate = "$duplications, $duplicate"
+                    duplicate = "duplicate: $duplications, $duplicate"
                 )
             )
         }
