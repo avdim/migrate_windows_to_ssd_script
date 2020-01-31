@@ -70,6 +70,7 @@ suspend fun main(args: Array<String>) {
                         withContext(diskWriteContext) {
                             val distination = moveToDir.resolve(it.longDirsName())
                             if (distination.exists()) {
+                                println("duplicate: ${distination}            from  ${it.absolutePath}")
                                 duplicate = it.absolutePath
                                 duplications++
                             } else {
