@@ -17,4 +17,11 @@ internal class FileNameExtKtTest{
         println(name)
     }
 
+    @Test
+    fun testSecondRoot() {
+        val file = File("C:/Win/A/B/C/D/E/sdf.jpg")
+        val name = file.smartName()
+        print(name)
+    }
+
 }

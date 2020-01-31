@@ -68,14 +68,14 @@ suspend fun main(args: Array<String>) {
                     totalSize += size
                     if (moveToDir.exists()) {
                         withContext(diskWriteContext) {
-                            val distination = moveToDir.resolve(it.longDirsName())
-                            if (distination.exists()) {
-                                println("duplicate: ${distination}            from  ${it.absolutePath}")
+                            val destination = moveToDir.resolve(it.smartName())
+                            if (destination.exists()) {
+                                println("duplicate: ${destination}            from  ${it.absolutePath}")
                                 duplicate = it.absolutePath
                                 duplications++
                             } else {
-                                distination.parentFile.mkdirs()
-                                it.copyTo(distination)
+                                destination.parentFile.mkdirs()
+                                it.copyTo(destination)
                             }
                         }
                     }

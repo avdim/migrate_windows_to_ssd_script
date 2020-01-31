@@ -22,3 +22,13 @@ fun File.longDirsName(depth: Int = 2): String {
     }
 }
 
+val File.secondRootName: String
+    get() {
+        var current: File = this
+        while (current.parentFile?.parentFile != null) {
+            current = current.parentFile
+        }
+        return current.simpleName
+    }
+
+fun File.smartName() = secondRootName + "/" + longDirsName()
