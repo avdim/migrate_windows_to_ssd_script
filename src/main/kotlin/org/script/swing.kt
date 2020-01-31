@@ -3,10 +3,7 @@ package org.script
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.awt.Component
-import javax.swing.BoxLayout
-import javax.swing.JFrame
-import javax.swing.JLabel
-import javax.swing.JPanel
+import javax.swing.*
 
 class ViewState(
     val processed: Int,
@@ -33,8 +30,8 @@ fun showSwing(): suspend (ViewState) -> Unit {
     val processedLabel = +JLabel("processed count")
     val foundLabel = +JLabel("found count")
     val timeLabel = +JLabel("time")
-    val minSizeLabel = +JLabel()
-    val maxSizeLabel = +JLabel()
+    val minSizeLabel = +JTextPane()
+    val maxSizeLabel = +JTextPane()
     val totalSizeLabel = +JLabel()
 
     frame.pack()
