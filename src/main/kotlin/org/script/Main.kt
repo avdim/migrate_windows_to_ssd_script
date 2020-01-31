@@ -22,6 +22,7 @@ val ignoreDirs: List<File> = listOf(
     File("C:\\windows"),
     File("D:\\windows")
 )
+val ignoreSize = 10 * 1024L
 
 fun File.printInfo(): String = "${length() / 1024 / 1000F} Mb, $absolutePath"
 
@@ -51,17 +52,19 @@ suspend fun main(args: Array<String>) {
         it.process {
             val ext = it.extension.toLowerCase()
             if (ext == "jpg" || ext == "jpeg") {
-                found++
                 val size = it.length()
-                if (size > maxSize) {
-                    maxSizeFile = it
-                    maxSize = size
+                if (size > ignoreSize) {
+                    found++
+                    if (size > maxSize) {
+                        maxSizeFile = it
+                        maxSize = size
+                    }
+                    if (size < minSize) {
+                        minSizeFile = it
+                        minSize = size
+                    }
+                    totalSize += size
                 }
-                if (size < minSize) {
-                    minSizeFile = it
-                    minSize = size
-                }
-                totalSize += size
             }
         }
     }
@@ -69,14 +72,14 @@ suspend fun main(args: Array<String>) {
 }
 
 fun File.process(depth: Int = 8, lambda: suspend (File) -> Unit) {
-    for(ignore in ignoreDirs) {
+    processedCount++
+    for (ignore in ignoreDirs) {
         if (relativeToOrNull(ignore) != null) {
             return
         }
     }
 
     currentProcess = this
-    processedCount++
     GlobalScope.launch {
         when {
             depth < 0 -> Unit
