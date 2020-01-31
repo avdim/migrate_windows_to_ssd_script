@@ -15,6 +15,8 @@ var found: Int = 0
 var duplicate: String = ""
 var duplications: Int = 0
 
+val diskWriteContext = newSingleThreadContext("write disk")
+
 val moveToDir = File("K:/save_jpg")
 val ignoreDirs: List<File> = listOf(
     moveToDir,
@@ -65,12 +67,13 @@ suspend fun main(args: Array<String>) {
                     }
                     totalSize += size
                     if (moveToDir.exists()) {
-                        withContext(Dispatchers.Main) {
-                            val distination = moveToDir.resolve(it.name)
+                        withContext(diskWriteContext) {
+                            val distination = moveToDir.resolve(it.longDirsName())
                             if (distination.exists()) {
                                 duplicate = it.absolutePath
                                 duplications++
                             } else {
+                                distination.parentFile.mkdirs()
                                 it.copyTo(distination)
                             }
                         }

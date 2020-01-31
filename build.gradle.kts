@@ -19,6 +19,7 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.3")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-javafx:1.3.3")
     implementation("no.tornado:tornadofx:1.7.17")
+    testImplementation("junit:junit:4.12")
 }
 
 java {
