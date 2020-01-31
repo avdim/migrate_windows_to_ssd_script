@@ -69,10 +69,6 @@ suspend fun main(args: Array<String>) {
                     if (moveToDir.exists()) {
                         withContext(diskWriteContext) {
                             val destination = moveToDir.resolve(it.longDirsName())
-                            val rootLabel = destination.parentFile
-                            if(!rootLabel.exists()) {
-                                rootLabel.createNewFile()
-                            }
                             if (destination.exists()) {
                                 println("duplicate: ${destination}            from  ${it.absolutePath}")
                                 duplicate = it.absolutePath
@@ -80,6 +76,10 @@ suspend fun main(args: Array<String>) {
                             } else {
                                 destination.parentFile.mkdirs()
                                 it.copyTo(destination)
+                            }
+                            val rootLabel = destination.parentFile
+                            if(!rootLabel.exists()) {
+                                rootLabel.createNewFile()
                             }
                         }
                     }
