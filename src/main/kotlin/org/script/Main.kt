@@ -70,9 +70,9 @@ suspend fun main(args: Array<String>) {
                         withContext(diskWriteContext) {
                             val destination = moveToDir.resolve(it.longDirsName())
 
-                            val rootLabel = destination.parentFile.parentFile.resolve(it.absolutePath.simpleName)
+                            val rootLabel = destination.parentFile.parentFile.resolve(it.parentFile.absolutePath.simpleName)
                             if(!rootLabel.exists()) {
-                                rootLabel.mkdirs()
+                                rootLabel.parentFile.mkdirs()
                                 rootLabel.createNewFile()
                             }
 
