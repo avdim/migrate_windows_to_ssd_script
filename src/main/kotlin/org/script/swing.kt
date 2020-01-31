@@ -14,7 +14,8 @@ class ViewState(
     val found: Int,
     val time: String,
     val minSizeStr:String,
-    val maxSizeStr:String
+    val maxSizeStr:String,
+    val totalSize:String
 )
 
 fun showSwing(): suspend (ViewState) -> Unit {
@@ -34,6 +35,7 @@ fun showSwing(): suspend (ViewState) -> Unit {
     val timeLabel = +JLabel("time")
     val minSizeLabel = +JLabel()
     val maxSizeLabel = +JLabel()
+    val totalSizeLabel = +JLabel()
 
     frame.pack()
     frame.isVisible = true
@@ -47,6 +49,7 @@ fun showSwing(): suspend (ViewState) -> Unit {
                 timeLabel.text = time
                 minSizeLabel.text = state.minSizeStr
                 maxSizeLabel.text = state.maxSizeStr
+                totalSizeLabel.text = state.totalSize
             }
             frame.pack()
         }

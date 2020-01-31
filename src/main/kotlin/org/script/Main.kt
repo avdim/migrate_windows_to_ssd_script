@@ -7,6 +7,7 @@ import kotlinx.coroutines.yield
 import java.io.File
 import java.util.*
 
+var totalSize: Long = 0L
 var maxSizeFile: File? = null
 var maxSize: Long = Long.MIN_VALUE
 var minSizeFile: File? = null
@@ -15,15 +16,16 @@ var currentProcess: File? = null
 var processedCount: Int = 0
 var found: Int = 0
 
+val moveToDir = File("K:/save_jpg")
+val ignoreDirs: List<File> = listOf(
+    moveToDir,
+    File("C:/windows"),
+    File("D:/windows")
+)
+
 fun File.printInfo(): String = "${length() / 1024 / 1000F} Mb, $absolutePath"
 
 suspend fun main(args: Array<String>) {
-    val moveToDir = File("K:/save_jpg")
-
-    val ignoreDirs: List<File> = listOf(
-        moveToDir
-    )
-
     val roots: Array<File> = File.listRoots()
     println(roots.map { it.absolutePath })
     val render = showSwing()
@@ -38,7 +40,8 @@ suspend fun main(args: Array<String>) {
                     found = found,
                     time = Date().toString(),
                     minSizeStr = minSizeFile?.printInfo().orEmpty(),
-                    maxSizeStr = maxSizeFile?.printInfo().orEmpty()
+                    maxSizeStr = maxSizeFile?.printInfo().orEmpty(),
+                    totalSize = "${totalSize / 1024 / 1000f} Mb"
                 )
             )
         }
@@ -58,6 +61,7 @@ suspend fun main(args: Array<String>) {
                     minSizeFile = it
                     minSize = size
                 }
+                totalSize += size
             }
         }
     }
@@ -65,6 +69,12 @@ suspend fun main(args: Array<String>) {
 }
 
 fun File.process(depth: Int = 8, lambda: suspend (File) -> Unit) {
+    for(ignore in ignoreDirs) {
+        if (relativeToOrNull(ignore) == null) {
+            return
+        }
+    }
+
     currentProcess = this
     processedCount++
     GlobalScope.launch {
