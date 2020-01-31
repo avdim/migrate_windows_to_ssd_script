@@ -3,7 +3,7 @@ package org.script
 import javafx.beans.property.SimpleStringProperty
 import tornadofx.*
 
-val stringProperty = SimpleStringProperty("_____________________________________________________")
+val stringProperty = SimpleStringProperty("TEST STRING")
 
 class MyView : View() {
     override val root = vbox() {
@@ -12,10 +12,6 @@ class MyView : View() {
 }
 
 class MyApp : App(MyView::class)
-
-fun main(args: Array<String>) {
-    launchTornadoFx()
-}
 
 fun launchTornadoFx() {
     launch<MyApp>()
