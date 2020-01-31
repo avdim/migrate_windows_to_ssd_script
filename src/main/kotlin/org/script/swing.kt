@@ -5,7 +5,7 @@ import kotlinx.coroutines.withContext
 import java.awt.Component
 import javax.swing.*
 
-class ViewState(
+data class ViewState(
     val processed: Int,
     val process: String,
     val found: Int,
@@ -14,6 +14,8 @@ class ViewState(
     val maxSizeStr:String,
     val totalSize:String
 )
+
+var previousState: ViewState? = null
 
 fun showSwing(): suspend (ViewState) -> Unit {
     val frame = JFrame("title1")
@@ -38,17 +40,18 @@ fun showSwing(): suspend (ViewState) -> Unit {
     frame.isVisible = true
 
     return { state: ViewState ->
-        withContext(Dispatchers.Main) {
-            with(state) {
+        if(previousState != state) {
+            previousState = state
+            withContext(Dispatchers.Main) {
                 processLabel.text = state.process
-                processedLabel.text = "processed: $processed"
+                processedLabel.text = "processed: ${state.processed}"
                 foundLabel.text = "found: $found"
-                timeLabel.text = time
+                timeLabel.text = state.time
                 minSizeLabel.text = state.minSizeStr
                 maxSizeLabel.text = state.maxSizeStr
                 totalSizeLabel.text = state.totalSize
+                frame.pack()
             }
-            frame.pack()
         }
     }
 
