@@ -1,9 +1,6 @@
 package org.script
 
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.yield
+import kotlinx.coroutines.*
 import java.io.File
 import java.util.*
 
@@ -15,6 +12,8 @@ var minSize: Long = Long.MAX_VALUE
 var currentProcess: File? = null
 var processedCount: Int = 0
 var found: Int = 0
+var duplicate: String = ""
+var duplications: Int = 0
 
 val moveToDir = File("K:/save_jpg")
 val ignoreDirs: List<File> = listOf(
@@ -42,7 +41,8 @@ suspend fun main(args: Array<String>) {
                     time = Date().toString(),
                     minSizeStr = minSizeFile?.printInfo().orEmpty(),
                     maxSizeStr = maxSizeFile?.printInfo().orEmpty(),
-                    totalSize = "${totalSize / 1024 / 1000f} Mb"
+                    totalSize = "${totalSize / 1024 / 1000f} Mb",
+                    duplicate = "$duplications, $duplicate"
                 )
             )
         }
@@ -64,6 +64,17 @@ suspend fun main(args: Array<String>) {
                         minSize = size
                     }
                     totalSize += size
+                    if (moveToDir.exists()) {
+                        withContext(Dispatchers.Main) {
+                            val distination = moveToDir.resolve(it.name)
+                            if (distination.exists()) {
+                                duplicate = it.absolutePath
+                                duplications++
+                            } else {
+                                it.copyTo(distination)
+                            }
+                        }
+                    }
                 }
             }
         }

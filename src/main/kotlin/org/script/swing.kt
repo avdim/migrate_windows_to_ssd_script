@@ -12,7 +12,8 @@ data class ViewState(
     val time: String,
     val minSizeStr:String,
     val maxSizeStr:String,
-    val totalSize:String
+    val totalSize:String,
+    val duplicate:String
 )
 
 var previousState: ViewState? = null
@@ -32,9 +33,10 @@ fun showSwing(): suspend (ViewState) -> Unit {
     val processedLabel = +JLabel("processed count")
     val foundLabel = +JLabel("found count")
     val timeLabel = +JLabel("time")
-    val minSizeLabel = +JTextPane()
-    val maxSizeLabel = +JTextPane()
+    val minSizeLabel = +JLabel()
+    val maxSizeLabel = +JLabel()
     val totalSizeLabel = +JLabel()
+    val duplicateLabel = +JLabel()
 
     frame.pack()
     frame.isVisible = true
@@ -50,6 +52,7 @@ fun showSwing(): suspend (ViewState) -> Unit {
                 minSizeLabel.text = state.minSizeStr
                 maxSizeLabel.text = state.maxSizeStr
                 totalSizeLabel.text = state.totalSize
+                duplicateLabel.text = state.duplicate
                 frame.pack()
             }
         }
