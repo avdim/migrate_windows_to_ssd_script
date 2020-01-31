@@ -19,8 +19,8 @@ var found: Int = 0
 val moveToDir = File("K:/save_jpg")
 val ignoreDirs: List<File> = listOf(
     moveToDir,
-    File("C:/windows"),
-    File("D:/windows")
+    File("C:\\windows"),
+    File("D:\\windows")
 )
 
 fun File.printInfo(): String = "${length() / 1024 / 1000F} Mb, $absolutePath"
@@ -70,7 +70,7 @@ suspend fun main(args: Array<String>) {
 
 fun File.process(depth: Int = 8, lambda: suspend (File) -> Unit) {
     for(ignore in ignoreDirs) {
-        if (relativeToOrNull(ignore) == null) {
+        if (relativeToOrNull(ignore) != null) {
             return
         }
     }
